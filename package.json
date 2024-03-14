@@ -1,12 +1,12 @@
 {
   "name": "entoany",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "description": "This is a custom language translated textfield allow you to set the preferred language in which you want to take input from user.",
   "main": "index.js",
   "scripts": {
     "test": "npm run test",
-    "build": "babel src -d dist"
-  
+    "build": "babel src -d dist",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/kashyapsandesh/Entoany#readme",
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.9",
