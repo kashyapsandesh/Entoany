@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import "./EntoanyTextField.css";
 import CustomDropdown from "./CustomDropdown";
 
-export const EntoanyTextField = ({ preferredLanguage, hintText }) => {
-  const [inputText, setInputText] = useState("");
-  const [candidates, setCandidates] = useState([]);
-  const [selectedCandidate, setSelectedCandidate] = useState("");
-
+export const EntoanyTextField = ({
+  preferredLanguage,
+  hintText,
+  inputText,
+  setInputText,
+  candidates,
+  setCandidates,
+}) => {
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
@@ -39,7 +42,6 @@ export const EntoanyTextField = ({ preferredLanguage, hintText }) => {
 
   const handleCandidateClick = (selectedValue) => {
     setInputText(selectedValue);
-    setSelectedCandidate(selectedValue);
   };
 
   const fetchCandidates = async (text) => {
