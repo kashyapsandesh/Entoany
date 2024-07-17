@@ -1,25 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./EntoanyTextField.css";
 import CustomDropdown from "./CustomDropdown";
+import { requestCandidates } from "./api";
 
 export const EntoanyTextField = ({
   preferredLanguage,
   hintText,
-  inputText,
-  setInputText,
-  candidates,
-  setCandidates,
+  onEnteredTextChange,
+  onSelectedTextChange,
 }) => {
+  const [inputText, setInputText] = useState("");
+  const [candidates, setCandidates] = useState([]);
+  const [selectedCandidate, setSelectedCandidate] = useState("");
+
   useEffect(() => {
-    const fetchCandidates = async () => {
+    const fetchCandidates = async (text) => {
+      if (text.trim() === "") {
+        return;
+      }
+
       try {
-        if (inputText.trim() !== "") {
-          const { candidates } = await requestCandidates(inputText);
-          setCandidates(candidates);
-        } else {
-          // Clear candidates when the input text is empty
-          setCandidates([]);
-        }
+        const { candidates } = await requestCandidates(text, preferredLanguage); // Pass preferredLanguage to requestCandidates
+        setCandidates(candidates || []);
       } catch (error) {
         console.error("Error fetching candidates:", error);
       }
@@ -31,21 +33,19 @@ export const EntoanyTextField = ({
   const handleInputChange = (e) => {
     const newText = e.target.value;
     setInputText(newText);
-
-    if (newText.trim() !== "") {
-      fetchCandidates(newText);
-    } else {
-      // Clear candidates when the input text is empty
-      setCandidates([]);
-    }
+    onEnteredTextChange(newText); // Pass input text change to parent
+    fetchCandidates(newText); // Trigger fetching candidates when input text changes
   };
 
   const handleCandidateClick = (selectedValue) => {
     setInputText(selectedValue);
+    setSelectedCandidate(selectedValue); // Update selected candidate
+    onSelectedTextChange(selectedValue); // Pass selected candidate to parent
+    // Optionally, clear candidates to close dropdown
+    setCandidates([]);
   };
 
   const fetchCandidates = async (text) => {
-    // Check if the input text is empty and return without making an API request
     if (text.trim() === "") {
       return;
     }
@@ -66,7 +66,6 @@ export const EntoanyTextField = ({
       }
     } catch (error) {
       console.error("Error fetching candidates:", error);
-      throw error;
     }
   };
 
