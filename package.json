@@ -1,6 +1,6 @@
 {
   "name": "entoany",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "This is a custom language translated textfield allow you to set the preferred language in which you want to take input from user.",
   "main": "index.js",
   "scripts": {
