@@ -11,42 +11,10 @@ export const EntoanyTextField = ({
 }) => {
   const [inputText, setInputText] = useState("");
   const [candidates, setCandidates] = useState([]);
-  const [selectedCandidate, setSelectedCandidate] = useState("");
-
-  useEffect(() => {
-    const fetchCandidates = async (text) => {
-      if (text.trim() === "") {
-        return;
-      }
-
-      try {
-        const { candidates } = await requestCandidates(text, preferredLanguage); // Pass preferredLanguage to requestCandidates
-        setCandidates(candidates || []);
-      } catch (error) {
-        console.error("Error fetching candidates:", error);
-      }
-    };
-
-    fetchCandidates();
-  }, [inputText, preferredLanguage]);
-
-  const handleInputChange = (e) => {
-    const newText = e.target.value;
-    setInputText(newText);
-    onEnteredTextChange(newText); // Pass input text change to parent
-    fetchCandidates(newText); // Trigger fetching candidates when input text changes
-  };
-
-  const handleCandidateClick = (selectedValue) => {
-    setInputText(selectedValue);
-    setSelectedCandidate(selectedValue); // Update selected candidate
-    onSelectedTextChange(selectedValue); // Pass selected candidate to parent
-    // Optionally, clear candidates to close dropdown
-    setCandidates([]);
-  };
 
   const fetchCandidates = async (text) => {
     if (text.trim() === "") {
+      setCandidates([]);
       return;
     }
 
@@ -58,15 +26,29 @@ export const EntoanyTextField = ({
 
       if (data[0] === "SUCCESS") {
         const candidatesList = data[1]?.[0]?.[1];
-        const responseArray = candidatesList?.toString().split(",");
-
-        setCandidates(responseArray || []);
+        setCandidates(candidatesList || []);
       } else {
         throw new Error("Failed to fetch candidates");
       }
     } catch (error) {
       console.error("Error fetching candidates:", error);
     }
+  };
+
+  useEffect(() => {
+    fetchCandidates(inputText);
+  }, [inputText, preferredLanguage]);
+
+  const handleInputChange = (e) => {
+    const newText = e.target.value;
+    setInputText(newText);
+    onEnteredTextChange(newText);
+  };
+
+  const handleCandidateClick = (selectedValue) => {
+    setInputText(selectedValue);
+    onSelectedTextChange(selectedValue);
+    setCandidates([]); // Optionally, clear candidates to close dropdown
   };
 
   return (
@@ -90,3 +72,4 @@ export const EntoanyTextField = ({
     </div>
   );
 };
+//
