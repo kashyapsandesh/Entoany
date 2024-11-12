@@ -1,16 +1,42 @@
 .custom-text-field-container {
-    margin-bottom: 20px;
-  }
-  
-  .input-field {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 0.35rem;
-    border: 1px solid #1f1d1d;
-  }
-  
+  position: relative; /* Ensure dropdown is positioned relative to this container */
+  width: 100%;
+}
 
-  
+.input-label {
+  display: block;
+}
 
-  
+.input-field {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.suggestion-dropdown {
+  position: absolute; /* Position dropdown over the input field */
+  top: 100%; /* Position directly below the input */
+  left: 0;
+  width: 100%;
+  max-height: 200px; /* Optional: to limit the dropdown height */
+  overflow-y: auto; /* Enable scrolling if there are many items */
+  background-color: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Add shadow for better visibility */
+  z-index: 9999; /* Ensure dropdown is above other content */
+  margin-top: 4px;
+  border-radius: 4px;
+  list-style-type: none; /* Remove bullet points */
+  padding: 0; /* Remove default padding */
+}
+
+.suggestion-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f1f1f1;
+}

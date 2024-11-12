@@ -1,16 +1,41 @@
 import React, { useState, useEffect } from "react";
 import "./EntoanyTextField.css";
-import CustomDropdown from "./CustomDropdown";
-import { requestCandidates } from "./api";
 
 export const EntoanyTextField = ({
   preferredLanguage,
   hintText,
-  onEnteredTextChange,
+  onEnteredTextChange = () => {},
   onSelectedTextChange,
+  width = "100%", // Default width for input field
+  dropdownWidth = "100%", // Default width for the dropdown
+  height = "20px", // Default height for input field
 }) => {
   const [inputText, setInputText] = useState("");
   const [candidates, setCandidates] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    console.log("inputText changed:", inputText); // Log text change
+    if (inputText.trim() !== "") {
+      fetchCandidates(inputText);
+    } else {
+      setCandidates([]);
+      setShowDropdown(false);
+    }
+  }, [inputText, preferredLanguage]);
+
+  const handleInputChange = (e) => {
+    const newText = e.target.value;
+    setInputText(newText);
+    onEnteredTextChange(newText);
+    setShowDropdown(true);
+  };
+
+  const handleCandidateSelect = (selectedValue) => {
+    setInputText(selectedValue);
+    onSelectedTextChange(selectedValue);
+    setShowDropdown(false); // Hide dropdown after selection
+  };
 
   const fetchCandidates = async (text) => {
     if (text.trim() === "") {
@@ -26,6 +51,7 @@ export const EntoanyTextField = ({
 
       if (data[0] === "SUCCESS") {
         const candidatesList = data[1]?.[0]?.[1];
+        setCandidates(candidatesList || []);
         setCandidates(candidatesList || []);
       } else {
         throw new Error("Failed to fetch candidates");
@@ -60,14 +86,27 @@ export const EntoanyTextField = ({
           onChange={handleInputChange}
           className="input-field"
           placeholder={hintText}
+          onFocus={() => setShowDropdown(true)} // Show dropdown when input is focused
+          onBlur={() => setShowDropdown(false)} // Hide dropdown when input loses focus
+          style={{ width, height }} // Apply width style here
         />
       </label>
 
-      {candidates.length > 0 && (
-        <CustomDropdown
-          candidates={candidates}
-          onSelectCandidate={handleCandidateClick}
-        />
+      {showDropdown && candidates.length > 0 && (
+        <ul
+          className="suggestion-dropdown"
+          style={{ width: dropdownWidth }} // Apply dropdown width
+        >
+          {candidates.map((candidate, index) => (
+            <li
+              key={index}
+              onMouseDown={() => handleCandidateSelect(candidate)} // Use onMouseDown instead of onClick
+              className="suggestion-item"
+            >
+              {candidate}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
