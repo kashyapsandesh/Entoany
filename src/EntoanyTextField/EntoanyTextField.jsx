@@ -38,11 +38,6 @@ export const EntoanyTextField = ({
   };
 
   const fetchCandidates = async (text) => {
-    if (text.trim() === "") {
-      setCandidates([]);
-      return;
-    }
-
     const apiUrl = `https://google.com/inputtools/request?text=${text}&ime=transliteration_en_${preferredLanguage}&num=4&cp=0&cs=1&ie=utf-8&oe=utf-8&a`;
 
     try {
@@ -52,29 +47,12 @@ export const EntoanyTextField = ({
       if (data[0] === "SUCCESS") {
         const candidatesList = data[1]?.[0]?.[1];
         setCandidates(candidatesList || []);
-        setCandidates(candidatesList || []);
       } else {
         throw new Error("Failed to fetch candidates");
       }
     } catch (error) {
       console.error("Error fetching candidates:", error);
     }
-  };
-
-  useEffect(() => {
-    fetchCandidates(inputText);
-  }, [inputText, preferredLanguage]);
-
-  const handleInputChange = (e) => {
-    const newText = e.target.value;
-    setInputText(newText);
-    onEnteredTextChange(newText);
-  };
-
-  const handleCandidateClick = (selectedValue) => {
-    setInputText(selectedValue);
-    onSelectedTextChange(selectedValue);
-    setCandidates([]); // Optionally, clear candidates to close dropdown
   };
 
   return (
@@ -111,4 +89,3 @@ export const EntoanyTextField = ({
     </div>
   );
 };
-//
