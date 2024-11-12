@@ -6,11 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 var _react = _interopRequireDefault(require("react"));
 require("./CustomDropdown.css");
-<<<<<<< HEAD
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
-=======
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
->>>>>>> 8622437 (version 1.0.11 publish with improvements)
 // Import your CSS file for styling
 
 var CustomDropdown = function CustomDropdown(_ref) {
